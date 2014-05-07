@@ -15,7 +15,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'MapsOfWar'
-        gdxVersion = '1.0.0'
+        gdxVersion = '1.0.1'
         roboVMVersion = '0.0.11'
     }
 
@@ -33,6 +33,7 @@ project(":desktop") {
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
 }

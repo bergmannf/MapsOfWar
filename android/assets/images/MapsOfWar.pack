@@ -1,0 +1,34 @@
+
+MapsOfWar.png
+size: 224,56
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+HumanFighter
+  rotate: false
+  xy: 2, 2
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: -1
+HumanFighter2
+  rotate: false
+  xy: 58, 2
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: -1
+HumanFighter3
+  rotate: false
+  xy: 114, 2
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: -1
+HumanFighter5
+  rotate: false
+  xy: 170, 2
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: -1
