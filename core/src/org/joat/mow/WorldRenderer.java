@@ -1,17 +1,17 @@
 package org.joat.mow;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Disposable;
+import org.joat.mow.Controller.WorldController;
 
 /**
  * Created by florian on 29/04/14.
  */
 public class WorldRenderer implements Disposable {
+    public static final String TAG = WorldRenderer.class.getName();
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private WorldController worldController;
@@ -21,32 +21,18 @@ public class WorldRenderer implements Disposable {
         init();
     }
 
-    private void init(){
+    private void init() {
         this.batch = new SpriteBatch();
-        this.camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
+        this.camera = (OrthographicCamera) this.worldController.getCamera();
         this.camera.position.set(0, 0, 0);
         this.camera.update();
     }
 
-    public void render(){
+    public void render() {
         renderTestObjects();
-/*        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (Cell[] row : this.gridMap.getCells()) {
-            for (int i = 0; i < row.length; i++) {
-                float xStart = row[i].getX();
-                float yStart = row[i].getY();
-                shapeRenderer.rect(xStart, yStart, 20, 20);
-            }
-        }
-        shapeRenderer.end();*/
     }
 
-    public void resize(int width, int height){
+    public void resize(int width, int height) {
         this.camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width;
         this.camera.update();
     }
@@ -63,6 +49,7 @@ public class WorldRenderer implements Disposable {
         for (Sprite sprite : worldController.testSprites) {
             sprite.draw(batch);
         }
+        worldController.getMap().getGrid().render(batch);
         batch.end();
     }
 

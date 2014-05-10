@@ -1,46 +1,55 @@
-package org.joat.mow;
+package org.joat.mow.Controller;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import org.joat.mow.CameraHelper;
+import org.joat.mow.Constants;
+import org.joat.mow.Model.AbstractGameObject;
+import org.joat.mow.Model.Map;
 
 /**
  * Created by florian on 29/04/14.
  */
 public class WorldController {
     private static final String TAG = WorldController.class.getName();
-    private InputAdapter debugListener;
-
     public Sprite[] testSprites;
     public int selectedSprite;
+    private InputMultiplexer inputMultiplexer;
+    private InputAdapter debugListener;
+    private AbstractGameObject selectedActor;
     private CameraHelper cameraHelper;
-
-    public CameraHelper getCameraHelper() {
-        return cameraHelper;
-    }
-
+    private Map map;
+    private Camera camera;
 
     public WorldController() {
         init();
     }
 
-    public void init(){
-        debugListener = new DebugKeyListener();
-        Gdx.input.setInputProcessor(debugListener);
+    public Map getMap() {
+        return map;
+    }
+
+    public CameraHelper getCameraHelper() {
+        return cameraHelper;
+    }
+
+    public void init() {
+        map = new Map();
         cameraHelper = new CameraHelper();
+        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
+        initMultiplexer();
+        Gdx.input.setInputProcessor(inputMultiplexer);
         initTestObjects();
     }
 
@@ -52,25 +61,29 @@ public class WorldController {
 
     private void initTestObjects() {
         testSprites = new Sprite[5];
-        int width = 32;
-        int height = 32;
-        Pixmap pixmap = createProceduralPixmap(width, height);
-	AssetManager am = new AssetManager();
-	am.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
-	am.finishLoading();
-	TextureAtlas atlas = am.get(Constants.TEXTURE_ATLAS_OBJECTS);
-	AtlasRegion a = atlas.findRegion("HumanFighter");
+        AssetManager am = new AssetManager();
+        am.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+        am.finishLoading();
+        TextureAtlas atlas = am.get(Constants.TEXTURE_ATLAS_OBJECTS);
+        AtlasRegion a = atlas.findRegion("HumanFighter");
         TextureRegion texture = a;
         for (int i = 0; i < testSprites.length; i++) {
             Sprite spr = new Sprite(texture);
             spr.setSize(1, 1);
             spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-            float randomX = MathUtils.random(-2.0f, 2.0f);
-            float randomY = MathUtils.random(-2.0f, 2.0f);
+            int randomX = MathUtils.random(-0, 4);
+            int randomY = MathUtils.random(-0, 4);
             spr.setPosition(randomX, randomY);
             testSprites[i] = spr;
         }
         selectedSprite = 0;
+    }
+
+    private void initMultiplexer() {
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(new ActorController(getCamera(), map));
+        inputMultiplexer.addProcessor(new GridCellController(getCamera(), map));
+        inputMultiplexer.addProcessor(new DebugKeyListener());
     }
 
     private void handleDebugInput(float deltaTime) {
@@ -143,16 +156,8 @@ public class WorldController {
         testSprites[selectedSprite].setRotation(rotation);
     }
 
-    private Pixmap createProceduralPixmap(int width, int height) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(1, 0, 0, 0.5f);
-        pixmap.fill();
-        pixmap.setColor(1, 1, 0, 1.0f);
-        pixmap.drawLine(0, 0, width, height);
-        pixmap.drawLine(width, 0, 0, height);
-        pixmap.setColor(0, 1, 1, 1);
-        pixmap.drawRectangle(0, 0, width, height);
-        return pixmap;
+    public Camera getCamera() {
+        return camera;
     }
 
     public class DebugKeyListener extends InputAdapter {
@@ -161,15 +166,13 @@ public class WorldController {
             if (keycode == Keys.R) {
                 init();
                 Gdx.app.debug(TAG, "Game world resetted.");
-            }
-            else if (keycode == Keys.SPACE){
+            } else if (keycode == Keys.SPACE) {
                 selectedSprite = (selectedSprite + 1) % testSprites.length;
                 if (cameraHelper.hasTarget()) {
                     cameraHelper.setTarget(testSprites[selectedSprite]);
                 }
                 Gdx.app.debug(TAG, "Sprite #" + selectedSprite + " selected.");
-            }
-            else if (keycode == Keys.ENTER) {
+            } else if (keycode == Keys.ENTER) {
                 cameraHelper.setTarget(cameraHelper.hasTarget() ? null : testSprites[selectedSprite]);
                 Gdx.app.debug(TAG, "Camera follow enabled:" + cameraHelper.hasTarget());
             }

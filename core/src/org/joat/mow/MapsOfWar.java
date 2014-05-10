@@ -2,7 +2,9 @@ package org.joat.mow;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import org.joat.mow.Controller.WorldController;
 
 public class MapsOfWar extends ApplicationAdapter {
 
@@ -14,6 +16,7 @@ public class MapsOfWar extends ApplicationAdapter {
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
+        Assets.instance.init(new AssetManager());
 		this.worldController = new WorldController();
 		this.worldRenderer = new WorldRenderer(worldController);
 		this.paused = false;
@@ -26,6 +29,9 @@ public class MapsOfWar extends ApplicationAdapter {
 
 	@Override
 	public void resume() {
+        // Android unloaded the application from memory.
+        // All assets need to be reloaded.
+        Assets.instance.init(new AssetManager());
 		this.paused = false;
 	}
 
@@ -47,5 +53,6 @@ public class MapsOfWar extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		this.worldRenderer.dispose();
+        Assets.instance.dispose();
 	}
 }
