@@ -24,8 +24,13 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String TAG = Assets.class.getName();
     public static final Assets instance = new Assets();
     private AssetManager assetManager;
+    private TextureAtlas atlas;
 
     private Assets() {
+    }
+
+    public TextureAtlas getAtlas() {
+        return atlas;
     }
 
     public void init(AssetManager assetManager) {
@@ -37,6 +42,7 @@ public class Assets implements Disposable, AssetErrorListener {
         for (String a : this.assetManager.getAssetNames()) {
             Gdx.app.debug(TAG, "Asset:" + a);
         }
+        this.atlas = this.assetManager.get(Constants.TEXTURE_ATLAS_OBJECTS);
     }
 
     @Override

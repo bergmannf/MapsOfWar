@@ -33,16 +33,12 @@ public class GridCellController extends InputAdapter {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Gdx.app.debug(TAG, "Touch coordinates: " + screenX + " " + screenY);
         Vector3 coordinates = new Vector3(screenX, screenY, 0);
         Vector3 unprojected = activeCamera.unproject(coordinates);
-        Gdx.app.debug(TAG, "Unprojected Touch coordinates: " + unprojected.x + " " + unprojected.y);
         Cell[][] cells = map.getGrid().getCells();
         for (Cell [] row : cells) {
             for (Cell c : row) {
-                Rectangle r = c.getCellSprite().getBoundingRectangle();
-                Gdx.app.debug(TAG, "Rectangle coordinates: " + r.getX() + " " + r.getY());
-                Gdx.app.debug(TAG, "Cell coordinates: " + c.position.x + " " + c.position.y);
+                Rectangle r = c.getDefaultCellSprite().getBoundingRectangle();
                 if (r.contains(unprojected.x, unprojected.y)) {
                     c.selected = true;
                 } else {

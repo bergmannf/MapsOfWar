@@ -26,7 +26,6 @@ public class WorldController {
     public Sprite[] testSprites;
     public int selectedSprite;
     private InputMultiplexer inputMultiplexer;
-    private InputAdapter debugListener;
     private AbstractGameObject selectedActor;
     private CameraHelper cameraHelper;
     private Map map;
@@ -50,33 +49,11 @@ public class WorldController {
         camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         initMultiplexer();
         Gdx.input.setInputProcessor(inputMultiplexer);
-        initTestObjects();
     }
 
     public void update(float deltaTime) {
         handleDebugInput(deltaTime);
-        updateTestObjects(deltaTime);
         cameraHelper.update(deltaTime);
-    }
-
-    private void initTestObjects() {
-        testSprites = new Sprite[5];
-        AssetManager am = new AssetManager();
-        am.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
-        am.finishLoading();
-        TextureAtlas atlas = am.get(Constants.TEXTURE_ATLAS_OBJECTS);
-        AtlasRegion a = atlas.findRegion("HumanFighter");
-        TextureRegion texture = a;
-        for (int i = 0; i < testSprites.length; i++) {
-            Sprite spr = new Sprite(texture);
-            spr.setSize(1, 1);
-            spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
-            int randomX = MathUtils.random(-0, 4);
-            int randomY = MathUtils.random(-0, 4);
-            spr.setPosition(randomX, randomY);
-            testSprites[i] = spr;
-        }
-        selectedSprite = 0;
     }
 
     private void initMultiplexer() {
@@ -147,13 +124,6 @@ public class WorldController {
 
     private void moveSelectedSprite(float x, float y) {
         testSprites[selectedSprite].translate(x, y);
-    }
-
-    private void updateTestObjects(float deltaTime) {
-        float rotation = testSprites[selectedSprite].getRotation();
-        rotation += 90 * deltaTime;
-        rotation %= 360;
-        testSprites[selectedSprite].setRotation(rotation);
     }
 
     public Camera getCamera() {

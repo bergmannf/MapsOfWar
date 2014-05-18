@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import org.joat.mow.Controller.WorldController;
+import org.joat.mow.Model.AbstractGameObject;
+import org.joat.mow.Model.Map;
 
 /**
  * Created by florian on 29/04/14.
@@ -24,7 +26,7 @@ public class WorldRenderer implements Disposable {
     private void init() {
         this.batch = new SpriteBatch();
         this.camera = (OrthographicCamera) this.worldController.getCamera();
-        this.camera.position.set(0, 0, 0);
+        this.camera.position.set(10, 10, 0);
         this.camera.update();
     }
 
@@ -46,10 +48,11 @@ public class WorldRenderer implements Disposable {
         this.worldController.getCameraHelper().applyTo(camera);
         this.batch.setProjectionMatrix(camera.combined);
         this.batch.begin();
-        for (Sprite sprite : worldController.testSprites) {
-            sprite.draw(batch);
+        Map m = worldController.getMap();
+        m.getGrid().render(batch);
+        for (AbstractGameObject actor : m.getActors()) {
+            actor.render(batch);
         }
-        worldController.getMap().getGrid().render(batch);
         batch.end();
     }
 

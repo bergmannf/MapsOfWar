@@ -20,7 +20,7 @@ public class CameraHelper {
     private Sprite target;
 
     public CameraHelper() {
-        this.position = new Vector2();
+        this.position = new Vector2(Constants.VIEWPORT_WIDTH / 2f, Constants.VIEWPORT_HEIGHT / 2f);
         this.zoom = 1.0f;
     }
 
