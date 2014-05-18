@@ -1,9 +1,7 @@
 package org.joat.mow.Controller;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import org.joat.mow.Model.Cell;
 import org.joat.mow.Model.Map;
@@ -38,12 +36,7 @@ public class GridCellController extends InputAdapter {
         Cell[][] cells = map.getGrid().getCells();
         for (Cell [] row : cells) {
             for (Cell c : row) {
-                Rectangle r = c.getDefaultCellSprite().getBoundingRectangle();
-                if (r.contains(unprojected.x, unprojected.y)) {
-                    c.selected = true;
-                } else {
-                    c.selected = false;
-                }
+                c.selected = c.hit(unprojected.x, unprojected.y);
             }
         }
         return super.touchUp(screenX, screenY, pointer, button);

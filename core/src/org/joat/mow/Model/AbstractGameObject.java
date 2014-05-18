@@ -25,4 +25,17 @@ public abstract class AbstractGameObject {
     public void update(float deltaTime) {}
 
     public abstract void render(SpriteBatch batch);
+
+    public boolean hit(float x, float y) {
+        int xLow = (int) this.position.x;
+        int xHigh = (int) (this.position.x + this.scale.x);
+        int yLow = (int) this.position.y;
+        int yHigh = (int) (this.position.y + this.scale.y);
+        if (xLow < x && x < xHigh) {
+            if (yLow < y && y < yHigh) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

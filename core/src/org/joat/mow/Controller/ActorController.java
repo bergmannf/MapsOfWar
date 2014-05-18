@@ -3,9 +3,6 @@ package org.joat.mow.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import org.joat.mow.Model.Cell;
 import org.joat.mow.Model.GameObject;
@@ -44,18 +41,8 @@ public class ActorController extends InputAdapter {
             }
         } else {
             for (GameObject actor : map.getActors()) {
-                int xLow = (int) actor.position.x;
-                int xHigh = (int)(actor.position.x + actor.scale.x);
-                int yLow = (int) actor.position.y;
-                int yHigh = (int)(actor.position.y + actor.scale.y);
-                Gdx.app.debug(TAG, "xLow: " + xLow);
-                Gdx.app.debug(TAG, "xHigh: " + xHigh);
-                Gdx.app.debug(TAG, "yLow: " + yLow);
-                Gdx.app.debug(TAG, "yHigh: " + yHigh);
-                if (xLow < unprojected.x && unprojected.x < xHigh) {
-                    if (yLow < unprojected.y && unprojected.y < yHigh) {
-                        map.setSelectedActor(actor);
-                    }
+                if (actor.hit(unprojected.x, unprojected.y)) {
+                    map.setSelectedActor(actor);
                 }
             }
         }
