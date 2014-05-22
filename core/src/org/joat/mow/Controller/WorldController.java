@@ -1,66 +1,67 @@
 package org.joat.mow.Controller;
 
+import org.joat.mow.CameraHelper;
+import org.joat.mow.Constants;
+import org.joat.mow.Model.GameObject;
+import org.joat.mow.Model.Map;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import org.joat.mow.CameraHelper;
-import org.joat.mow.Constants;
-import org.joat.mow.Model.AbstractGameObject;
-import org.joat.mow.Model.Map;
+import com.badlogic.gdx.input.GestureDetector;
 
 /**
  * Created by florian on 29/04/14.
  */
 public class WorldController {
+    public class DebugKeyListener extends InputAdapter {
+        @Override
+        public boolean keyUp(int keycode) {
+            if (keycode == Keys.R) {
+                init();
+                Gdx.app.debug(TAG, "Game world resetted.");
+            } else if (keycode == Keys.SPACE) {
+                selectedSprite = (selectedSprite + 1) % testSprites.length;
+                if (cameraHelper.hasTarget()) {
+                    cameraHelper.setTarget(testSprites[selectedSprite]);
+                }
+                Gdx.app.debug(TAG, "Sprite #" + selectedSprite + " selected.");
+            } else if (keycode == Keys.ENTER) {
+                cameraHelper.setTarget(cameraHelper.hasTarget() ? null : testSprites[selectedSprite]);
+                Gdx.app.debug(TAG, "Camera follow enabled:" + cameraHelper.hasTarget());
+            }
+            return false;
+        }
+    }
     private static final String TAG = WorldController.class.getName();
     public Sprite[] testSprites;
     public int selectedSprite;
     private InputMultiplexer inputMultiplexer;
-    private AbstractGameObject selectedActor;
     private CameraHelper cameraHelper;
     private Map map;
+
     private Camera camera;
+	private GridCellController gridCellController;
 
     public WorldController() {
         init();
     }
 
-    public Map getMap() {
-        return map;
+    public Camera getCamera() {
+        return camera;
     }
 
     public CameraHelper getCameraHelper() {
         return cameraHelper;
     }
 
-    public void init() {
-        map = new Map();
-        cameraHelper = new CameraHelper();
-        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
-        initMultiplexer();
-        Gdx.input.setInputProcessor(inputMultiplexer);
-    }
-
-    public void update(float deltaTime) {
-        handleDebugInput(deltaTime);
-        cameraHelper.update(deltaTime);
-    }
-
-    private void initMultiplexer() {
-        inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(new ActorController(getCamera(), map));
-        inputMultiplexer.addProcessor(new GridCellController(getCamera(), map));
-        inputMultiplexer.addProcessor(new DebugKeyListener());
+    public Map getMap() {
+        return map;
     }
 
     private void handleDebugInput(float deltaTime) {
@@ -116,6 +117,23 @@ public class WorldController {
         }
     }
 
+    public void init() {
+        map = new Map();
+        cameraHelper = new CameraHelper();
+        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
+        initMultiplexer();
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    private void initMultiplexer() {
+        inputMultiplexer = new InputMultiplexer();
+        gridCellController = new GridCellController(getCamera(), map);
+        inputMultiplexer.addProcessor(new ActorController(getCamera(), map));
+        inputMultiplexer.addProcessor(this.gridCellController);
+        inputMultiplexer.addProcessor(new GestureDetector(new GestureController(this.cameraHelper)));
+        inputMultiplexer.addProcessor(new DebugKeyListener());
+    }
+
     private void moveCamera(float x, float y) {
         float newX = cameraHelper.getPosition().x + x;
         float newY = cameraHelper.getPosition().y + y;
@@ -126,27 +144,18 @@ public class WorldController {
         testSprites[selectedSprite].translate(x, y);
     }
 
-    public Camera getCamera() {
-        return camera;
+    public void update(float deltaTime) {
+        handleDebugInput(deltaTime);
+        cameraHelper.update(deltaTime);
     }
 
-    public class DebugKeyListener extends InputAdapter {
-        @Override
-        public boolean keyUp(int keycode) {
-            if (keycode == Keys.R) {
-                init();
-                Gdx.app.debug(TAG, "Game world resetted.");
-            } else if (keycode == Keys.SPACE) {
-                selectedSprite = (selectedSprite + 1) % testSprites.length;
-                if (cameraHelper.hasTarget()) {
-                    cameraHelper.setTarget(testSprites[selectedSprite]);
-                }
-                Gdx.app.debug(TAG, "Sprite #" + selectedSprite + " selected.");
-            } else if (keycode == Keys.ENTER) {
-                cameraHelper.setTarget(cameraHelper.hasTarget() ? null : testSprites[selectedSprite]);
-                Gdx.app.debug(TAG, "Camera follow enabled:" + cameraHelper.hasTarget());
-            }
-            return false;
-        }
-    }
+    /**
+     * Prepares a new actor that will be added to the map with the next click on a cell.
+     * @param string The path to the internal image of the actor.
+     */
+	public void newActor(String string) {
+		// TODO: make the parameter the image and maybe add more options.
+		GameObject o = new GameObject(string);
+		this.gridCellController.setObjectToPlace(o);
+	}
 }

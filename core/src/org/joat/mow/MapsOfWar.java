@@ -1,10 +1,13 @@
 package org.joat.mow;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+
 import org.joat.mow.Controller.WorldController;
+import org.joat.mow.Views.WorldRenderer;
 
 public class MapsOfWar extends ApplicationAdapter {
 
@@ -15,7 +18,7 @@ public class MapsOfWar extends ApplicationAdapter {
 
 	@Override
 	public void create() {
-		Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
         Assets.instance.init(new AssetManager());
 		this.worldController = new WorldController();
 		this.worldRenderer = new WorldRenderer(worldController);

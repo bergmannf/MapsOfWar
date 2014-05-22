@@ -43,7 +43,9 @@ public class CameraHelper {
     }
 
     public void setZoom(float zoom) {
-        this.zoom = zoom;
+        if (zoom > MAX_ZOOM_IN && zoom < MAX_ZOOM_OUT) {
+            this.zoom = zoom;
+        }
     }
 
     public void addZoom(float amount) {

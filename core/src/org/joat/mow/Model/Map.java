@@ -1,5 +1,8 @@
 package org.joat.mow.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -7,16 +10,19 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Map {
     private GameObject selectedActor;
-    private GameObject[] actors;
+    private List<GameObject> actors;
     private Grid grid;
 
     public Map() {
-        grid = new Grid(5, 5);
-        actors = new GameObject[2];
-        actors[0] = new GameObject("HumanFighter");
-        actors[0].position = new Vector2(0, 0);
-        actors[1] = new GameObject("HumanFighter2");
-        actors[1].position = new Vector2(4, 4);
+        grid = new Grid(25, 25);
+        actors = new ArrayList<GameObject>();
+
+        GameObject a = new GameObject("HumanFighter");
+        a.position = new Vector2(0, 0);
+        actors.add(a);
+        a = new GameObject("HumanFighter2");
+        a.position = new Vector2(4, 4);
+        actors.add(a);
     }
 
     public GameObject getSelectedActor() {
@@ -31,7 +37,12 @@ public class Map {
         return grid;
     }
 
-    public GameObject[] getActors() {
+    public List<GameObject> getActors() {
         return actors;
     }
+
+	public void addActor(GameObject newActor, Cell c) {
+		newActor.position = c.position;
+		actors.add(newActor);
+	}
 }

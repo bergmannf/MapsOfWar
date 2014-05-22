@@ -11,6 +11,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -24,16 +25,32 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String TAG = Assets.class.getName();
     public static final Assets instance = new Assets();
     private AssetManager assetManager;
-    private TextureAtlas atlas;
+    private TextureAtlas unitSpriteAtlas;
+    private TextureAtlas uiSpriteAtlas;
+    private Skin uiSkin;
 
     private Assets() {
     }
 
-    public TextureAtlas getAtlas() {
-        return atlas;
+    @Override
+    public void dispose() {
+        this.assetManager.dispose();
     }
 
-    public void init(AssetManager assetManager) {
+    @Override
+    public void error(AssetDescriptor asset, Throwable throwable) {
+        Gdx.app.error(TAG, "Could not load asset: '" + asset + "'" + throwable);
+    }
+
+    public TextureAtlas getUnitSpriteAtlas() {
+        return unitSpriteAtlas;
+    }
+
+    public TextureAtlas getUiSpriteAtlas() {
+		return uiSpriteAtlas;
+	}
+
+	public void init(AssetManager assetManager) {
         this.assetManager = assetManager;
         this.assetManager.setErrorListener(this);
         this.assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
@@ -42,16 +59,17 @@ public class Assets implements Disposable, AssetErrorListener {
         for (String a : this.assetManager.getAssetNames()) {
             Gdx.app.debug(TAG, "Asset:" + a);
         }
-        this.atlas = this.assetManager.get(Constants.TEXTURE_ATLAS_OBJECTS);
+        this.unitSpriteAtlas = this.assetManager.get(Constants.TEXTURE_ATLAS_OBJECTS);
+        this.setUiSpriteAtlas(new TextureAtlas(Gdx.files.internal("skin/uiskin.atlas")));
+        this.uiSkin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        this.uiSkin.addRegions(this.getUiSpriteAtlas());
     }
 
-    @Override
-    public void error(AssetDescriptor asset, Throwable throwable) {
-        Gdx.app.error(TAG, "Could not load asset: '" + asset + "'" + throwable);
-    }
+	public void setUiSpriteAtlas(TextureAtlas uiSpriteAtlas) {
+		this.uiSpriteAtlas = uiSpriteAtlas;
+	}
 
-    @Override
-    public void dispose() {
-        this.assetManager.dispose();
-    }
+	public Skin getSkin() {
+		return this.uiSkin;
+	}
 }

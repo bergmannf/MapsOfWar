@@ -1,13 +1,13 @@
-package org.joat.mow;
+package org.joat.mow.Views;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Disposable;
+import org.joat.mow.Constants;
 import org.joat.mow.Controller.WorldController;
 import org.joat.mow.Model.AbstractGameObject;
 import org.joat.mow.Model.Map;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Created by florian on 29/04/14.
@@ -17,6 +17,7 @@ public class WorldRenderer implements Disposable {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private WorldController worldController;
+	private PlacementUI placementUi;
 
     public WorldRenderer(WorldController controller) {
         this.worldController = controller;
@@ -28,23 +29,30 @@ public class WorldRenderer implements Disposable {
         this.camera = (OrthographicCamera) this.worldController.getCamera();
         this.camera.position.set(10, 10, 0);
         this.camera.update();
+        this.placementUi = new PlacementUI(worldController);
     }
 
+    /**
+     * Renders the complete user interface for a map, including the UI.
+     * The UI is rendered after the map to maintain visibility.
+     */
     public void render() {
-        renderTestObjects();
+    	renderMap();
+    	renderUi();
     }
 
     public void resize(int width, int height) {
         this.camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width;
         this.camera.update();
+        this.placementUi.resize(width, height);
     }
 
     @Override
     public void dispose() {
         this.batch.dispose();
     }
-
-    private void renderTestObjects() {
+    
+    private void renderMap() {
         this.worldController.getCameraHelper().applyTo(camera);
         this.batch.setProjectionMatrix(camera.combined);
         this.batch.begin();
@@ -55,5 +63,8 @@ public class WorldRenderer implements Disposable {
         }
         batch.end();
     }
-
+    
+    private void renderUi() {
+        this.placementUi.render();
+    }
 }

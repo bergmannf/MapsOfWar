@@ -3,7 +3,9 @@ package org.joat.mow.Controller;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+
 import org.joat.mow.Model.Cell;
+import org.joat.mow.Model.GameObject;
 import org.joat.mow.Model.Map;
 
 /**
@@ -11,6 +13,7 @@ import org.joat.mow.Model.Map;
  */
 public class GridCellController extends InputAdapter {
     public static final String TAG = GridCellController.class.getName();
+    private GameObject objectToPlace;
     private final Map map;
 
     /**
@@ -37,8 +40,16 @@ public class GridCellController extends InputAdapter {
         for (Cell [] row : cells) {
             for (Cell c : row) {
                 c.selected = c.hit(unprojected.x, unprojected.y);
+                if (c.selected && null != objectToPlace) { 
+                	map.addActor(objectToPlace, c);
+                	objectToPlace = null;
+                }
             }
         }
         return super.touchUp(screenX, screenY, pointer, button);
     }
+
+	public void setObjectToPlace(GameObject o) {
+		this.objectToPlace = o;
+	}
 }
