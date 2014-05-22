@@ -130,7 +130,7 @@ public class WorldController {
         gridCellController = new GridCellController(getCamera(), map);
         inputMultiplexer.addProcessor(new ActorController(getCamera(), map));
         inputMultiplexer.addProcessor(this.gridCellController);
-        inputMultiplexer.addProcessor(new GestureDetector(new GestureController(this.cameraHelper)));
+        inputMultiplexer.addProcessor(new GestureDetector(new GestureController(this.getCamera(), this.cameraHelper)));
         inputMultiplexer.addProcessor(new DebugKeyListener());
     }
 
