@@ -17,10 +17,10 @@ public class Map {
         grid = new Grid(25, 25);
         actors = new ArrayList<GameObject>();
 
-        GameObject a = new GameObject("HumanFighter");
+        GameObject a = new GameObject("units-fighters/HumanFighter");
         a.position = new Vector2(0, 0);
         actors.add(a);
-        a = new GameObject("HumanFighter2");
+        a = new GameObject("units-fighters/HumanFighter2");
         a.position = new Vector2(4, 4);
         actors.add(a);
     }

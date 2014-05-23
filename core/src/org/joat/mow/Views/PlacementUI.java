@@ -5,16 +5,23 @@ import org.joat.mow.Controller.WorldController;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
+import com.esotericsoftware.tablelayout.Cell;
 
 /**
  * This UI will allow the placement of units on the map.
@@ -52,22 +59,32 @@ public class PlacementUI implements Disposable {
 		this.stage = new Stage();
 		final Window window = new Window("Units", skin);
 		window.setClip(true);
-		Button b = new TextButton("Unit", skin);
-		ChangeListener l = new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				worldController.newActor("HumanFighter");
-			}
-			
-		};
-		b.addListener(l);
-		window.add(b);
-		window.row();
+		addButtons(window);
 		window.pack();
 		window.debugTable();
 		this.stage.addActor(window);
 		this.multiplexer.addProcessor(0, this.stage);
+	}
+
+	private void addButtons(final Window window) {
+		TextureAtlas atlas = Assets.instance.getUnitSpriteAtlas();
+		for (final AtlasRegion r : atlas.getRegions()){
+			if (!r.name.startsWith("unit")) { continue; }
+			TextureRegionDrawable d = new TextureRegionDrawable(r);
+			ImageButton b = new ImageButton(d);
+			b.setColor(1, 0, 0, 1);
+			b.addListener(new ChangeListener() {
+
+				@Override
+				public void changed(ChangeEvent event, Actor actor) {
+					worldController.newActor(r.name);
+				}
+				
+			});
+			Cell<ImageButton> c = window.add(b);
+			c.width(64);
+			c.height(64);
+		}
 	}
 
 	public void render() {

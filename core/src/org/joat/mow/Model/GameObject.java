@@ -18,6 +18,8 @@ public class GameObject extends AbstractGameObject {
     @Override
     public void render(SpriteBatch batch) {
         assert this.sprite != null;
-        batch.draw(sprite, this.position.x, this.position.y, this.dimension.x, this.dimension.y);
+        float sizeX = this.dimension.x * this.scale.x;
+        float sizeY = this.dimension.y * this.scale.y;
+        batch.draw(sprite, this.position.x, this.position.y, sizeX, sizeY);
     }
 }

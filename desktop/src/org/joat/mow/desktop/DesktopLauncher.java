@@ -13,10 +13,12 @@ public class DesktopLauncher {
 
 	public static void main(String[] arg) {
 		if (rebuildAtlas) {
+			String atlasTarget = "./images";
 			Settings settings = new Settings();
 			settings.maxWidth = 512;
 			settings.maxHeight = 512;
 			settings.debug = drawDebugOutline;
+			settings.combineSubdirectories = true;
 			TexturePacker.process(settings, 
 				"../assets-raw/images",
 				"./images",
