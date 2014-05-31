@@ -1,40 +1,68 @@
 
 MapsOfWar.png
-size: 234,122
+size: 474,112
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 GridBorder
   rotate: false
-  xy: 2, 58
+  xy: 298, 48
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-HumanFighter
+units-archers/archer
   rotate: false
-  xy: 2, 2
+  xy: 2, 40
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+units-archers/bowman
+  rotate: false
+  xy: 76, 40
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+units-archers/woodsman
+  rotate: false
+  xy: 150, 40
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+units-demons/wraith
+  rotate: false
+  xy: 224, 40
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+units-fighters/HumanFighter
+  rotate: false
+  xy: 364, 58
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
-HumanFighter2
+units-fighters/HumanFighter2
   rotate: false
-  xy: 68, 68
+  xy: 420, 58
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
-HumanFighter3
+units-fighters/HumanFighter3
   rotate: false
-  xy: 124, 68
+  xy: 364, 2
   size: 54, 54
   orig: 54, 54
   offset: 0, 0
   index: -1
-HumanFighter5
+units-fighters/HumanFighter5
   rotate: false
-  xy: 180, 68
+  xy: 420, 2
   size: 54, 54
   orig: 54, 54
   offset: 0, 0

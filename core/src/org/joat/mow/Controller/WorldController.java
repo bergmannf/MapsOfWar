@@ -69,19 +69,6 @@ public class WorldController {
         if (Gdx.app.getType() != Application.ApplicationType.Desktop) {
             return;
         }
-        float spriteMoveSpeed = 5 * deltaTime;
-        if (Gdx.input.isKeyPressed(Keys.A)) {
-            moveSelectedSprite(-spriteMoveSpeed, 0);
-        }
-        if (Gdx.input.isKeyPressed(Keys.D)) {
-            moveSelectedSprite(spriteMoveSpeed, 0);
-        }
-        if (Gdx.input.isKeyPressed(Keys.W)) {
-            moveSelectedSprite(0, spriteMoveSpeed);
-        }
-        if (Gdx.input.isKeyPressed(Keys.S)) {
-            moveSelectedSprite(0, -spriteMoveSpeed);
-        }
         float camMoveSpeed = 5 * deltaTime;
         float camMoveSpeedAccelerationFactor = 5;
         if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
@@ -139,10 +126,6 @@ public class WorldController {
         float newX = cameraHelper.getPosition().x + x;
         float newY = cameraHelper.getPosition().y + y;
         cameraHelper.setPosition(newX, newY);
-    }
-
-    private void moveSelectedSprite(float x, float y) {
-        testSprites[selectedSprite].translate(x, y);
     }
 
     public void update(float deltaTime) {
