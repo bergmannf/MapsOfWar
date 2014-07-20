@@ -30,7 +30,6 @@ public class Grid {
         this.cells = cells;
     }
 
-
     /**
      * Create a grid for a given rows and columns with a given cellSize.
      * @param gameHeight - Number of cells in height.
