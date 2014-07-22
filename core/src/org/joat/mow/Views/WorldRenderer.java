@@ -1,13 +1,13 @@
 package org.joat.mow.Views;
 
-import org.joat.mow.Constants;
-import org.joat.mow.Controller.WorldController;
-import org.joat.mow.Model.AbstractGameObject;
-import org.joat.mow.Model.Map;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import org.joat.mow.Constants;
+import org.joat.mow.Controller.WorldController;
+import org.joat.mow.Model.AbstractGameObject;
+import org.joat.mow.Model.Cell;
+import org.joat.mow.Model.Map;
 
 /**
  * Created by florian on 29/04/14.
@@ -57,9 +57,14 @@ public class WorldRenderer implements Disposable {
         this.batch.setProjectionMatrix(camera.combined);
         this.batch.begin();
         Map m = worldController.getMap();
-        m.getGrid().render(batch);
+        SpriteRenderer renderer = new SpriteRenderer();
+        for (Cell[] rows : m.getGrid().getCells()) {
+            for (Cell cell : rows) {
+                renderer.render(this.batch, cell);
+            }
+        }
         for (AbstractGameObject actor : m.getActors()) {
-            actor.render(batch);
+            renderer.render(this.batch, actor);
         }
         batch.end();
     }

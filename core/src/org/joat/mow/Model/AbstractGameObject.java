@@ -1,11 +1,7 @@
 package org.joat.mow.Model;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import org.joat.mow.Assets;
 
 /**
  * Created by florian on 08/05/14.
@@ -28,18 +24,13 @@ public abstract class AbstractGameObject {
 		this.rotation = 0;
 	}
 
+    public String getSpriteName() {
+        return spriteName;
+    }
+
 	public void setSpriteName(String spriteName) {
 		this.spriteName = spriteName;
 	}
-
-	public Sprite getSprite() {
-		return sprite;
-	}
-
-	public void update(float deltaTime) {
-	}
-
-	public abstract void render(SpriteBatch batch);
 
 	public boolean hit(float x, float y) {
 		int xLow = (int) this.position.x;
@@ -52,19 +43,6 @@ public abstract class AbstractGameObject {
 			}
 		}
 		return false;
-	}
-
-	protected void initGraphics() {
-		TextureAtlas atlas = Assets.instance.getUnitSpriteAtlas();
-		TextureRegion region = atlas.findRegion(spriteName);
-		if (region != null) {
-			Sprite s = new Sprite(region);
-			s.setScale(this.scale.x, this.scale.y);
-			this.sprite = s;
-		} else {
-			throw new IllegalArgumentException("sprite does not exist "
-					+ this.spriteName);
-		}
 	}
 
 }

@@ -1,7 +1,9 @@
 package org.joat.mow.Model;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple rectangular Grid.
@@ -43,14 +45,6 @@ public class Grid {
         initializeGridCells();
     }
 
-    public void render(SpriteBatch batch) {
-        for(Cell[] row : this.cells) {
-            for(Cell c : row) {
-                c.render(batch);
-            }
-        }
-    }
-
     private void initializeGridCells() {
         this.cells = new Cell[rows][columns];
         for (int y = 0; y < rows; y ++) {
@@ -58,6 +52,26 @@ public class Grid {
                 this.cells[y][x] = new Cell(x, y);
             }
         }
+    }
+
+    public List<Cell> neighbors(Cell cell) {
+        List<Cell> neighbors = new ArrayList<Cell>();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                int newX = (int) cell.position.x + i;
+                int newY = (int) cell.position.y + i;
+                if (newX >= 0
+                        && newY >= 0
+                        && newX < columns
+                        && newY < rows) {
+                    neighbors.add(this.getCells()[newY][newX]);
+                }
+            }
+        }
+        return neighbors;
     }
 }
 

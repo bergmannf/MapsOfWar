@@ -4,9 +4,12 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import junit.framework.Assert;
 import org.joat.mow.MapsOfWar;
+import org.joat.mow.Model.Cell;
 import org.joat.mow.Model.Grid;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 
 /**
@@ -24,6 +27,9 @@ public class GridTests {
 
     @Test
     public void neighborsTest() {
-        Assert.assertTrue(true);
+        Grid grid = new Grid(3, 3);
+        Cell cell = new Cell(1, 1);
+        List<Cell> n = grid.neighbors(cell);
+        Assert.assertEquals(n.size(), 2);
     }
 }
