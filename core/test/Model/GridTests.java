@@ -7,6 +7,7 @@ import org.joat.mow.MapsOfWar;
 import org.joat.mow.Model.Cell;
 import org.joat.mow.Model.Grid;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,8 +19,8 @@ import java.util.List;
 public class GridTests {
     private Grid grid;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() {
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
         config.renderInterval = 1f/60;
         HeadlessApplication app = new HeadlessApplication(new MapsOfWar(), config);
@@ -30,6 +31,6 @@ public class GridTests {
         Grid grid = new Grid(3, 3);
         Cell cell = new Cell(1, 1);
         List<Cell> n = grid.neighbors(cell);
-        Assert.assertEquals(n.size(), 2);
+        Assert.assertEquals(4, n.size());
     }
 }

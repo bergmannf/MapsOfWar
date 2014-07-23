@@ -24,18 +24,11 @@ public class Grid {
      */
     private Cell[][] cells;
 
-    public Cell[][] getCells() {
-        return cells;
-    }
-
-    public void setCells(Cell[][] cells) {
-        this.cells = cells;
-    }
-
     /**
      * Create a grid for a given rows and columns with a given cellSize.
+     *
      * @param gameHeight - Number of cells in height.
-     * @param gameWidth - Number of cells in width.
+     * @param gameWidth  - Number of cells in width.
      */
     public Grid(int gameHeight, int gameWidth) {
         this.rows = gameHeight;
@@ -45,9 +38,17 @@ public class Grid {
         initializeGridCells();
     }
 
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public void setCells(Cell[][] cells) {
+        this.cells = cells;
+    }
+
     private void initializeGridCells() {
         this.cells = new Cell[rows][columns];
-        for (int y = 0; y < rows; y ++) {
+        for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
                 this.cells[y][x] = new Cell(x, y);
             }
@@ -57,18 +58,24 @@ public class Grid {
     public List<Cell> neighbors(Cell cell) {
         List<Cell> neighbors = new ArrayList<Cell>();
         for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) {
-                    continue;
-                }
-                int newX = (int) cell.position.x + i;
-                int newY = (int) cell.position.y + i;
-                if (newX >= 0
-                        && newY >= 0
-                        && newX < columns
-                        && newY < rows) {
-                    neighbors.add(this.getCells()[newY][newX]);
-                }
+            if (i == 0) {
+                continue;
+            }
+            int newX = (int) cell.position.x + i;
+            int newY = (int) cell.position.y;
+            if (newX >= 0
+                    && newY >= 0
+                    && newX < columns
+                    && newY < rows) {
+                neighbors.add(this.getCells()[newY][newX]);
+            }
+            newX = (int) cell.position.x;
+            newY = (int) cell.position.y + i;
+            if (newX >= 0
+                    && newY >= 0
+                    && newX < columns
+                    && newY < rows) {
+                neighbors.add(this.getCells()[newY][newX]);
             }
         }
         return neighbors;
