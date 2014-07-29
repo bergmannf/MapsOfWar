@@ -46,6 +46,15 @@ public class GridTests {
     }
 
     @Test
+    public void cellAccess() {
+        Grid grid = new Grid(4, 2);
+        Assert.assertNotNull(grid.getCell(0, 0));
+        Assert.assertNotNull(grid.getCell(3, 0));
+        Assert.assertNotNull(grid.getCell(0, 1));
+        Assert.assertNotNull(grid.getCell(3, 1));
+    }
+
+    @Test
     public void pathTest() {
         Grid grid = new Grid(3, 3);
     }

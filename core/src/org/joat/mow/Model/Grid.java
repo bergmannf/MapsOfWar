@@ -27,12 +27,12 @@ public class Grid {
     /**
      * Create a grid for a given rows and columns with a given cellSize.
      *
-     * @param gameHeight - Number of cells in height.
-     * @param gameWidth  - Number of cells in width.
+     * @param gameWidth  - Number of columns in the grid.
+     * @param gameHeight - Number of rows in the grid.
      */
-    public Grid(int gameHeight, int gameWidth) {
-        this.rows = gameHeight;
-        this.columns = gameWidth;
+    public Grid(int gameWidth, int gameHeight) {
+        this.rows = gameWidth;
+        this.columns = gameHeight;
         Gdx.app.debug("DEBUG", "Rows: " + rows);
         Gdx.app.debug("DEBUG", "Columns: " + columns);
         initializeGridCells();
@@ -79,6 +79,16 @@ public class Grid {
             }
         }
         return neighbors;
+    }
+
+    /**
+     * Returns the cell at the X and Y coordinates.
+     * Indexing starts at 0.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     */
+    public Cell getCell(int x, int y) {
+        return this.cells[x][y];
     }
 }
 
