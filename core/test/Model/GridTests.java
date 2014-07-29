@@ -46,7 +46,7 @@ public class GridTests {
     }
 
     @Test
-    public void cellAccess() {
+    public void cellAccessTest() {
         Grid grid = new Grid(4, 2);
         Assert.assertNotNull(grid.getCell(0, 0));
         Assert.assertNotNull(grid.getCell(3, 0));
