@@ -36,14 +36,11 @@ public class GridCellController extends InputAdapter {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Vector3 coordinates = new Vector3(screenX, screenY, 0);
         Vector3 unprojected = activeCamera.unproject(coordinates);
-        Cell[][] cells = map.getGrid().getCells();
-        for (Cell [] row : cells) {
-            for (Cell c : row) {
-                c.selected = c.hit(unprojected.x, unprojected.y);
-                if (c.selected && null != objectToPlace) { 
-                	map.addActor(objectToPlace, c);
-                	objectToPlace = null;
-                }
+        for (Cell cell : map.getGrid().getNodes()) {
+            cell.selected = cell.hit(unprojected.x, unprojected.y);
+            if (cell.selected && null != objectToPlace) {
+                map.addActor(objectToPlace, cell);
+                objectToPlace = null;
             }
         }
         return super.touchUp(screenX, screenY, pointer, button);

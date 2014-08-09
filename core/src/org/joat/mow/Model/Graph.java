@@ -1,5 +1,6 @@
 package org.joat.mow.Model;
 
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -15,5 +16,7 @@ public interface Graph {
     public void addEdge(Cell start, Cell end, int cost);
 
     public Set<Edge> getEdges();
+
+    public HashMap<Cell, Set<Edge>> getAdjacencyList();
 }
 

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import org.joat.mow.Assets;
 import org.joat.mow.Model.AbstractGameObject;
-import sun.misc.Cache;
 
 import java.util.HashMap;
 

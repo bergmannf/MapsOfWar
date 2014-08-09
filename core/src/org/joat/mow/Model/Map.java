@@ -12,6 +12,7 @@ public class Map {
     private GameObject selectedActor;
     private List<GameObject> actors;
     private Grid grid;
+    private String backgroundImage;
 
     public Map() {
         grid = new Grid(25, 25);

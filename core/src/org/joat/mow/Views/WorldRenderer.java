@@ -58,10 +58,8 @@ public class WorldRenderer implements Disposable {
         this.batch.begin();
         Map m = worldController.getMap();
         SpriteRenderer renderer = new SpriteRenderer();
-        for (Cell[] rows : m.getGrid().getCells()) {
-            for (Cell cell : rows) {
-                renderer.render(this.batch, cell);
-            }
+        for (Cell cell : m.getGrid().getNodes()) {
+            renderer.render(this.batch, cell);
         }
         for (AbstractGameObject actor : m.getActors()) {
             renderer.render(this.batch, actor);

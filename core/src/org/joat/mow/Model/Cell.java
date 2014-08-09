@@ -17,4 +17,19 @@ public class Cell extends AbstractGameObject {
         this.blocksSight = false;
         this.spriteName = "GridBorder";
     }
+
+    public int getX() {
+        final int x = (int) Math.floor(this.position.x);
+        return x;
+    }
+
+    public int getY() {
+        final int x = (int) Math.floor(this.position.y);
+        return x;
+    }
+
+    @Override
+    public String toString() {
+        return "Cell (X: " + this.getX() + " Y: " + this.getY() + ")";
+    }
 }

@@ -19,4 +19,9 @@ public class Edge {
         this.end = end;
         this.cost = cost;
     }
+
+    @Override
+    public String toString(){
+        return "Edge: (" + start.toString() + " -- " + end.toString() + ")";
+    }
 }

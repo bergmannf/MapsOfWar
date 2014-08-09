@@ -2,13 +2,22 @@ package org.joat.mow.Model;
 
 import com.badlogic.gdx.Gdx;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * A simple rectangular Grid.
  */
-public class Grid {
+public class Grid implements Graph {
+    /**
+     * An adjacency list of all edges in the graph.
+     */
+    private final HashMap<Cell, Set<Edge>> adjacencyList;
+
+    /**
+     * A set of all edges in the graph.
+     */
+    private final Set<Edge> edges;
+
     /**
      * Number of grid cells used for rows.
      */
@@ -22,7 +31,9 @@ public class Grid {
     /**
      * Individual cells of the Grid.
      */
-    private Cell[][] cells;
+    private Set<Cell> nodes;
+
+    private SearchAlgorithm searchAlgorithm;
 
     /**
      * Create a grid for a given rows and columns with a given cellSize.
@@ -31,52 +42,59 @@ public class Grid {
      * @param gameHeight - Number of rows in the grid.
      */
     public Grid(int gameWidth, int gameHeight) {
-        this.rows = gameWidth;
-        this.columns = gameHeight;
+        this.rows = gameHeight;
+        this.columns = gameWidth;
+        this.edges = new HashSet<Edge>();
+        this.nodes = new HashSet<Cell>();
+        this.adjacencyList = new HashMap<Cell, Set<Edge>>();
+        this.searchAlgorithm = new Dijkstra();
+        initializeGridCells();
+        initializeGridEdges();
         Gdx.app.debug("DEBUG", "Rows: " + rows);
         Gdx.app.debug("DEBUG", "Columns: " + columns);
-        initializeGridCells();
-    }
-
-    public Cell[][] getCells() {
-        return cells;
-    }
-
-    public void setCells(Cell[][] cells) {
-        this.cells = cells;
     }
 
     private void initializeGridCells() {
-        this.cells = new Cell[rows][columns];
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-                this.cells[y][x] = new Cell(x, y);
+                Cell c = new Cell(x, y);
+                System.out.println("Adding new node.");
+                this.addNode(c);
             }
         }
     }
 
-    public List<Cell> neighbors(Cell cell) {
-        List<Cell> neighbors = new ArrayList<Cell>();
-        for (int i = -1; i <= 1; i++) {
-            if (i == 0) {
-                continue;
+    private void initializeGridEdges() {
+        int[] moveNorth = new int[]{0, 1};
+        int[] moveEast = new int[]{1, 0};
+        int[] moveSouth = new int[]{0, -1};
+        int[] moveWest = new int[]{-1, 0};
+        List<int[]> movements = new ArrayList<int[]>();
+        movements.add(moveNorth);
+        movements.add(moveEast);
+        movements.add(moveSouth);
+        movements.add(moveWest);
+        for (Cell node : getNodes()) {
+            for (int[] movement : movements) {
+                int newX = node.getX() + movement[0];
+                int newY = node.getY() + movement[1];
+                if (newX >= 0 && newX < this.columns) {
+                    if (newY >= 0 && newY < this.rows) {
+                        System.out.println("Adding new edge.");
+                        Cell target = this.getCell(newX, newY);
+                        this.addEdge(node, target);
+                    }
+                }
             }
-            int newX = (int) cell.position.x + i;
-            int newY = (int) cell.position.y;
-            if (newX >= 0
-                    && newY >= 0
-                    && newX < columns
-                    && newY < rows) {
-                neighbors.add(this.getCells()[newY][newX]);
-            }
-            newX = (int) cell.position.x;
-            newY = (int) cell.position.y + i;
-            if (newX >= 0
-                    && newY >= 0
-                    && newX < columns
-                    && newY < rows) {
-                neighbors.add(this.getCells()[newY][newX]);
-            }
+        }
+    }
+
+    public Set<Cell> neighbors(Cell cell) {
+        Set<Cell> neighbors = new HashSet<Cell>();
+        final HashMap<Cell, Set<Edge>> edges = this.getAdjacencyList();
+        final Set<Edge> paths = edges.get(cell);
+        for (Edge path : paths) {
+            neighbors.add(path.end);
         }
         return neighbors;
     }
@@ -88,7 +106,55 @@ public class Grid {
      * @param y The y coordinate.
      */
     public Cell getCell(int x, int y) {
-        return this.cells[x][y];
+        for (Cell node : this.getNodes()) {
+            if (node.getX() == x && node.getY() == y) {
+                return node;
+            }
+        }
+        throw new IllegalArgumentException("No node found at coordinates: " + x + " " + y);
+    }
+
+    public List<Cell> shortestPath(Cell start, Cell end) {
+        return this.searchAlgorithm.shortestPath(this, start, end);
+    }
+
+    @Override
+    public void addNode(Cell cell) {
+        this.nodes.add(cell);
+    }
+
+    @Override
+    public Set<Cell> getNodes() {
+        return this.nodes;
+    }
+
+    @Override
+    public void addEdge(Cell start, Cell end) {
+        this.addEdge(start, end, 1);
+    }
+
+    @Override
+    public void addEdge(Cell start, Cell end, int cost) {
+        Set<Edge> paths;
+        if (this.adjacencyList.containsKey(start)) {
+            paths = this.adjacencyList.get(start);
+        } else {
+            paths = new HashSet<Edge>();
+        }
+        Edge e = new Edge(start, end, cost);
+        this.edges.add(e);
+        paths.add(e);
+        this.adjacencyList.put(start, paths);
+    }
+
+    @Override
+    public Set<Edge> getEdges() {
+        return this.edges;
+    }
+
+    @Override
+    public HashMap<Cell, Set<Edge>> getAdjacencyList() {
+        return this.adjacencyList;
     }
 }
 

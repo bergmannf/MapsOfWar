@@ -32,8 +32,8 @@ public class ActorController extends InputAdapter {
             try {
                 int x = (int) Math.floor(unprojected.x);
                 int y = (int) Math.floor(unprojected.y);
-                Grid c = map.getGrid();
-                Cell cell = c.getCells()[y][x];
+                Grid grid = map.getGrid();
+                Cell cell = grid.getCell(x, y);
                 map.getSelectedActor().position = cell.position;
                 map.setSelectedActor(null);
             } catch (ArrayIndexOutOfBoundsException e) {
