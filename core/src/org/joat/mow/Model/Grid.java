@@ -53,39 +53,6 @@ public class Grid implements Graph {
         Gdx.app.debug("DEBUG", "Columns: " + columns);
     }
 
-    private void initializeGridCells() {
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < columns; x++) {
-                Cell c = new Cell(x, y);
-                this.addNode(c);
-            }
-        }
-    }
-
-    private void initializeGridEdges() {
-        int[] moveNorth = new int[]{0, 1};
-        int[] moveEast = new int[]{1, 0};
-        int[] moveSouth = new int[]{0, -1};
-        int[] moveWest = new int[]{-1, 0};
-        List<int[]> movements = new ArrayList<int[]>();
-        movements.add(moveNorth);
-        movements.add(moveEast);
-        movements.add(moveSouth);
-        movements.add(moveWest);
-        for (Cell node : getNodes()) {
-            for (int[] movement : movements) {
-                int newX = node.getX() + movement[0];
-                int newY = node.getY() + movement[1];
-                if (newX >= 0 && newX < this.columns) {
-                    if (newY >= 0 && newY < this.rows) {
-                        Cell target = this.getCell(newX, newY);
-                        this.addEdge(node, target);
-                    }
-                }
-            }
-        }
-    }
-
     public Set<Cell> neighbors(Cell cell) {
         Set<Cell> neighbors = new HashSet<Cell>();
         final HashMap<Cell, Set<Edge>> edges = this.getAdjacencyList();
@@ -154,5 +121,39 @@ public class Grid implements Graph {
     public HashMap<Cell, Set<Edge>> getAdjacencyList() {
         return this.adjacencyList;
     }
+
+    private void initializeGridCells() {
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
+                Cell c = new Cell(x, y);
+                this.addNode(c);
+            }
+        }
+    }
+
+    private void initializeGridEdges() {
+        int[] moveNorth = new int[]{0, 1};
+        int[] moveEast = new int[]{1, 0};
+        int[] moveSouth = new int[]{0, -1};
+        int[] moveWest = new int[]{-1, 0};
+        List<int[]> movements = new ArrayList<int[]>();
+        movements.add(moveNorth);
+        movements.add(moveEast);
+        movements.add(moveSouth);
+        movements.add(moveWest);
+        for (Cell node : getNodes()) {
+            for (int[] movement : movements) {
+                int newX = node.getX() + movement[0];
+                int newY = node.getY() + movement[1];
+                if (newX >= 0 && newX < this.columns) {
+                    if (newY >= 0 && newY < this.rows) {
+                        Cell target = this.getCell(newX, newY);
+                        this.addEdge(node, target);
+                    }
+                }
+            }
+        }
+    }
+
 }
 
