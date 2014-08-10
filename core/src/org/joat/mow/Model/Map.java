@@ -1,6 +1,7 @@
 package org.joat.mow.Model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
@@ -40,6 +41,16 @@ public class Map {
 
     public List<GameObject> getActors() {
         return actors;
+    }
+
+    public Collection<Cell> reachableCells() {
+        if (selectedActor == null) { return new ArrayList<Cell>(); }
+        else {
+            int x = selectedActor.getX();
+            int y = selectedActor.getY();
+            Cell c = grid.getCell(x, y);
+            return grid.reachableCells(c, selectedActor.getAvailableSteps());
+        }
     }
 
 	public void addActor(GameObject newActor, Cell c) {

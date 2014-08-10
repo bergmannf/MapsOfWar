@@ -7,8 +7,15 @@ import com.badlogic.gdx.math.Vector2;
  * of the application.
  */
 public class GameObject extends AbstractGameObject {
-
     private int availableSteps;
+
+    public void setAvailableSteps(int availableSteps) {
+        this.availableSteps = availableSteps;
+    }
+
+    public int getAvailableSteps() {
+        return availableSteps;
+    }
 
     public GameObject(String spriteName) {
         this.spriteName = spriteName;

@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -66,16 +66,24 @@ public class GridTests {
     @Test
     public void pathTest() {
         Grid grid = new Grid(3, 3);
-        List<Cell> path = grid.shortestPath(grid.getCell(0, 0), grid.getCell(0, 2));
+        Collection<Cell> path = grid.shortestPath(grid.getCell(0, 0), grid.getCell(0, 2));
+        Cell[] array = (Cell[]) path.toArray();
         Assert.assertEquals(3, path.size());
-        Assert.assertEquals(path.get(0), grid.getCell(0, 2));
-        Assert.assertEquals(path.get(1), grid.getCell(0, 1));
-        Assert.assertEquals(path.get(2), grid.getCell(0, 0));
+        Assert.assertEquals(array[0], grid.getCell(0, 2));
+        Assert.assertEquals(array[1], grid.getCell(0, 1));
+        Assert.assertEquals(array[2], grid.getCell(0, 0));
     }
     
     @Test
     public void reachabilityTest() {
-        // Set<Cell> reachable = grid.reachableFrom(grid.getCell(0, 0), 2);
-    	Assert.fail();
+        Grid grid = new Grid(3, 3);
+        Collection<Cell> reachable = grid.reachableCells(grid.getCell(0, 0), 2);
+        Assert.assertEquals(6, reachable.size());
+        Assert.assertThat(reachable, hasItem(grid.getCell(0, 0)));
+        Assert.assertThat(reachable, hasItem(grid.getCell(0, 1)));
+        Assert.assertThat(reachable, hasItem(grid.getCell(0, 2)));
+        Assert.assertThat(reachable, hasItem(grid.getCell(1, 1)));
+        Assert.assertThat(reachable, hasItem(grid.getCell(1, 0)));
+        Assert.assertThat(reachable, hasItem(grid.getCell(2, 0)));
     }
 }

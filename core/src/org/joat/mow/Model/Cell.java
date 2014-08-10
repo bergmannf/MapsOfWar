@@ -1,6 +1,5 @@
 package org.joat.mow.Model;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 public class Cell extends AbstractGameObject {
@@ -16,16 +15,6 @@ public class Cell extends AbstractGameObject {
         this.blocked = false;
         this.blocksSight = false;
         this.spriteName = "GridBorder";
-    }
-
-    public int getX() {
-        final int x = (int) Math.floor(this.position.x);
-        return x;
-    }
-
-    public int getY() {
-        final int x = (int) Math.floor(this.position.y);
-        return x;
     }
 
     @Override

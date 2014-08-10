@@ -78,9 +78,26 @@ public class Grid implements Graph {
         throw new IllegalArgumentException("No node found at coordinates: " + x + " " + y);
     }
 
-    public List<Cell> shortestPath(Cell start, Cell end) {
+    /**
+     * Finds the shortest path from a start to an end-cell.
+     * @param start The start cell.
+     * @param end The end cell.
+     * @return A list of cells denoting the path to take.
+     */
+    public Collection<Cell> shortestPath(Cell start, Cell end) {
     	this.searchAlgorithm = new Dijkstra(this);
         return this.searchAlgorithm.shortestPath(this, start, end);
+    }
+
+    /**
+     * Find all cells that are reachable for the given distance.
+     * @param start The start cell.
+     * @param distance The maximum distance from the start cell.
+     * @return A collection of all reachable cells.
+     */
+    public Collection<Cell> reachableCells(Cell start, int distance) {
+        DepthFirstSearch dfs = new DepthFirstSearch(this);
+        return dfs.search(start, distance);
     }
 
     @Override
@@ -154,6 +171,5 @@ public class Grid implements Graph {
             }
         }
     }
-
 }
 

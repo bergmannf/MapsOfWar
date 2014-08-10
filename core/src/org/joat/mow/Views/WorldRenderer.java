@@ -1,5 +1,6 @@
 package org.joat.mow.Views;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
@@ -60,6 +61,9 @@ public class WorldRenderer implements Disposable {
         SpriteRenderer renderer = new SpriteRenderer();
         for (Cell cell : m.getGrid().getNodes()) {
             renderer.render(this.batch, cell);
+        }
+        for (Cell cell : m.reachableCells()) {
+            renderer.render(this.batch, cell, Color.BLUE);
         }
         for (AbstractGameObject actor : m.getActors()) {
             renderer.render(this.batch, actor);
