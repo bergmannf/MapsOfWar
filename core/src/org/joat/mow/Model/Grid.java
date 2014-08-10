@@ -47,7 +47,6 @@ public class Grid implements Graph {
         this.edges = new HashSet<Edge>();
         this.nodes = new HashSet<Cell>();
         this.adjacencyList = new HashMap<Cell, Set<Edge>>();
-        this.searchAlgorithm = new Dijkstra();
         initializeGridCells();
         initializeGridEdges();
         Gdx.app.debug("DEBUG", "Rows: " + rows);
@@ -58,7 +57,6 @@ public class Grid implements Graph {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
                 Cell c = new Cell(x, y);
-                System.out.println("Adding new node.");
                 this.addNode(c);
             }
         }
@@ -80,7 +78,6 @@ public class Grid implements Graph {
                 int newY = node.getY() + movement[1];
                 if (newX >= 0 && newX < this.columns) {
                     if (newY >= 0 && newY < this.rows) {
-                        System.out.println("Adding new edge.");
                         Cell target = this.getCell(newX, newY);
                         this.addEdge(node, target);
                     }
@@ -115,6 +112,7 @@ public class Grid implements Graph {
     }
 
     public List<Cell> shortestPath(Cell start, Cell end) {
+    	this.searchAlgorithm = new Dijkstra(this);
         return this.searchAlgorithm.shortestPath(this, start, end);
     }
 

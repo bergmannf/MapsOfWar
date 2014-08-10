@@ -5,13 +5,14 @@ import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import org.joat.mow.MapsOfWar;
 import org.joat.mow.Model.Cell;
 import org.joat.mow.Model.Grid;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.Assert;
-import static org.hamcrest.CoreMatchers.*;
 
 import java.util.List;
 import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.hasItem;
 
 
 /**
@@ -22,14 +23,17 @@ public class GridTests {
     public static void setUp() {
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
         config.renderInterval = 1f/60;
-        HeadlessApplication app = new HeadlessApplication(new MapsOfWar(), config);
+        new HeadlessApplication(new MapsOfWar(), config);
     }
 
     @Test
     public void gridSetupTest() {
         Grid grid = new Grid(3, 3);
-        Assert.assertEquals(grid.getNodes().size(), 9);
-        Assert.assertEquals(grid.getEdges().size(), 24);
+        Assert.assertEquals(9, grid.getNodes().size());
+        Assert.assertEquals(24, grid.getEdges().size());
+        grid = new Grid(4, 2);
+        Assert.assertEquals(8, grid.getNodes().size());
+        Assert.assertEquals(20, grid.getEdges().size());
     }
 
     @Test
@@ -63,8 +67,15 @@ public class GridTests {
     public void pathTest() {
         Grid grid = new Grid(3, 3);
         List<Cell> path = grid.shortestPath(grid.getCell(0, 0), grid.getCell(0, 2));
-        Assert.assertEquals(2, path.size());
-        Assert.assertEquals(path.get(0), grid.getCell(0, 1));
-        Assert.assertEquals(path.get(1), grid.getCell(0, 2));
+        Assert.assertEquals(3, path.size());
+        Assert.assertEquals(path.get(0), grid.getCell(0, 2));
+        Assert.assertEquals(path.get(1), grid.getCell(0, 1));
+        Assert.assertEquals(path.get(2), grid.getCell(0, 0));
+    }
+    
+    @Test
+    public void reachabilityTest() {
+        // Set<Cell> reachable = grid.reachableFrom(grid.getCell(0, 0), 2);
+    	Assert.fail();
     }
 }
